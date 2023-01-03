@@ -10,6 +10,8 @@ app.use(morgan(':url :method :body'));
 const cors = require('cors');
 app.use(cors());
 
+app.use(express.static('build'));
+
 const generateId = () => {
   const id = Math.floor(Math.random() * 9999);
   return id;
