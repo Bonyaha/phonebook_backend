@@ -7,6 +7,9 @@ morgan.token('body', (req) => JSON.stringify(req.body));
 
 app.use(morgan(':url :method :body'));
 
+const cors = require('cors');
+app.use(cors());
+
 const generateId = () => {
   const id = Math.floor(Math.random() * 9999);
   return id;
