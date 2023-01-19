@@ -51,11 +51,6 @@ app.post('/api/persons', (request, response) => {
       error: 'fill in all info(name and number) please',
     });
   }
-  Person.find({}).then((person) => {
-    if (person.name === body.name) {
-      return response.status(404).json({ error: 'name must be unique' });
-    }
-  });
 
   const person = new Person({
     name: body.name,
