@@ -1,26 +1,39 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator') //for checking unique value
 
-const url = process.env.MONGODB_URI;
-console.log('connecting to', url);
+// eslint-disable-next-line no-undef
+const url = process.env.MONGODB_URI
+console.log('connecting to', url)
 mongoose
   .connect(url)
-  .then((result) => {
-    console.log('connected to MongoDB');
+  .then(() => {
+    console.log('connected to MongoDB')
   })
   .catch((error) => {
-    console.log('error connecting to MongoDB:', error.message);
-  });
+    console.log('error connecting to MongoDB:', error.message)
+  })
 const noteSchema = new mongoose.Schema({
-  name: String,
-  number: String,
-});
-
+  name: { type: String, minLength: 3, required: true, unique: true },
+  number: {
+    type: String,
+    validate: {
+      validator: function (v) {
+        return /^\d{2,3}(-\d{6,})?$/.test(v)
+      },
+      message: (props) => `${props.value} is not a valid phone number!`,
+    },
+    required: [true, 'User phone number required'],
+  },
+})
+noteSchema.plugin(uniqueValidator, {
+  message: 'Error, expected {PATH} to be unique.',
+})
 noteSchema.set('toJSON', {
   transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString();
-    delete returnedObject._id;
-    delete returnedObject.__v;
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
   },
-});
+})
 
-module.exports = mongoose.model('Person', noteSchema);
+module.exports = mongoose.model('Person', noteSchema)
