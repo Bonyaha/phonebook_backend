@@ -13,7 +13,7 @@ app.use(cors())
 app.use(express.static('build'))
 
 app.get('/', (request, response) => {
-  response.send('<h1>Hello, pussy!</h1>')
+  response.send('<h1>Hello, world!</h1>')
 })
 
 app.post('/api/persons', (request, response, next) => {
